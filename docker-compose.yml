@@ -1,5 +1,21 @@
 version: "3.9"
 services:
+  jenkins-docker:
+    image: docker:dind
+    ports:
+      - 2376:2376
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    privileged: true
+    command: --storage-driver=overlay2
+
   jenkins-blueocean:
     build: .
     ports:
@@ -20,5 +36,6 @@ volumes:
   jenkins-docker-certs: {}
 
 networks:
-  jenkins: {}
+  jenkins:
+
 
